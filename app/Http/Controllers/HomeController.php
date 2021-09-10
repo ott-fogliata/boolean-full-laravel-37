@@ -27,7 +27,11 @@ class HomeController extends Controller
 
         // SELECT * FROM books
         $allBooks = Book::all();
-        return view('home', compact('allBooks'));
+
+        // Bonus:
+        $bookFiltrati = Book::where('price', '>', 10)->get();
+
+        return view('home', compact('allBooks', 'bookFiltrati'));
 
 
         //dump($allBooks);
