@@ -63,11 +63,11 @@ class CarsTableSeeder extends Seeder
 
             $car->color = $faker->colorName();
 
-            $finalUrl = $this->getRedirectFinalUrl('https://loremflickr.com/320/240/cars');
+            //$finalUrl = $this->getRedirectFinalUrl('https://loremflickr.com/320/240/cars');
 
-            echo $finalUrl . "\n";
+            //echo $finalUrl . "\n";
 
-            $car->picture = $finalUrl;
+            $car->picture = $faker->imageUrl(500, 500, 'cars');
 
             $car->brand_new = $faker->boolean();
 

@@ -20,3 +20,12 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/public', 'PagesController@publicSection');
+
+//Route::get('/private', 'PagesController@privateSection')->middleware('auth');
+Route::get('/private', 'PagesController@privateSection');
+
+Route::resource('cars', 'CarController');
+
+
