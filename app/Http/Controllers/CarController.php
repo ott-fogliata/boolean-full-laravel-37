@@ -63,16 +63,7 @@ class CarController extends Controller
 
         $car = new Car();
     
-        $car->brand = $data['brand'];
-        $car->model_name = $data['model_name'];
-        $car->engine = $data['engine'];
-        $car->hp = $data['hp'];
-        $car->vin = $data['vin'];
-        $car->color = $data['color'];
-        $car->picture = $data['picture'];
-        $car->brand_new = key_exists('brand_new', $data) ? true: false;
-        $car->price = $data['price'];
-        $car->save();  // salva nel database
+        $this->fillAndSaveCar($car, $data);
         
         return redirect()->route('cars.show', $car->id);
     
@@ -98,10 +89,24 @@ class CarController extends Controller
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
+     * 
+     * la rotta riceverà come parametro un id cars/{car}/edit
+     * (per esempio: http://127.0.0.1:8000/cars/12/edit)
+     * lui riceve un id, poi cerca di trasformare l'id in un oggetto
+     * --> nella trasformazione va a leggere direttamente dal db.
+     *
      */
-    public function edit($id)
-    {
-        //
+    public function edit(Car $car)  
+    {  
+        /*
+            - creare la form 
+            - dal controller passare l'oggetto alla form 
+            - la form mostrerà al posto dei vari value degli input il valore relativo all'oggetto
+            - il pulsante submit/la form condurranno al controller update
+            - l'update aggiornerà sempre quell'oggetto e salverà nel databse
+        */
+
+        return view('cars.edit', compact('car'));
     }
 
     /**
@@ -111,9 +116,18 @@ class CarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Car $car)
     {
-        //
+
+        $data = $request->all();       
+
+        // $data['brand_new'] = key_exists('brand_new', $data) ? true: false;
+        // $car->update($data);  // update = fill + save
+        
+        $this->fillAndSaveCar($car, $data);
+
+        return redirect()->route('cars.show', $car);
+
     }
 
     /**
@@ -122,8 +136,23 @@ class CarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Car $car)
     {
-        //
+        $car->delete();
+
+        return redirect()->route('cars.index');
+    }
+
+    private function fillAndSaveCar(Car $car, $data) {
+        $car->brand = $data['brand'];
+        $car->model_name = $data['model_name'];
+        $car->engine = $data['engine'];
+        $car->hp = $data['hp'];
+        $car->vin = $data['vin'];
+        $car->color = $data['color'];
+        $car->picture = $data['picture'];
+        $car->brand_new = key_exists('brand_new', $data) ? true: false;
+        $car->price = $data['price'];
+        $car->save();  // salva nel database
     }
 }

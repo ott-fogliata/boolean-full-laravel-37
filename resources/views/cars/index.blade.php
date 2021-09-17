@@ -28,7 +28,21 @@
                 <td><img src="{{$car->picture}}" alt="picture of {{$car->model_name}}" /></td>
                 <td>{{$car->price}}</td>
                 <!-- a href="/cars/{{$car->id}}" -->
-                <td><a href="{{ route('cars.show', $car) }}"><i class="bi bi-zoom-in"></i></a></td>
+                <td>
+                    <a href="{{ route('cars.show', $car) }}">
+                        <button class="btn btn-primary"><i class="bi bi-zoom-in"></i></button>    
+                    </a>
+                
+                    <a href="{{ route('cars.edit', $car) }}">
+                        <button class="btn btn-primary"><i class="bi bi-pencil-square"></i></button>    
+                    </a>
+                    <!--<a href="{{ route('cars.destroy', $car) }}"><i class="bi bi-trash"></i></a>-->
+                    <form action="{{ route('cars.destroy', $car) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                    </form>
+                </td>
             </tr>
         @endforeach
     </tbody>
